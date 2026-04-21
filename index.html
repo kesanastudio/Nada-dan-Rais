@@ -30,7 +30,6 @@
       overflow: hidden;
     }
 
-    /* VIDEO */
     .bg-video {
       position: absolute;
       inset: 0;
@@ -40,15 +39,7 @@
       z-index: -2;
     }
 
-    /* OVERLAY */
-    .overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.2);
-      z-index: -1;
-    }
-
-    /* 🔥 POSISI FINAL (SUDAH DI-TUNE) */
+    /* 🔥 POSISI FINAL */
     .content {
       position: absolute;
       top: 51%;
@@ -70,8 +61,7 @@
 
     .label {
       font-size: 14px;
-      color: white;
-      opacity: 0.85;
+      color: #8b2c4a;
       margin-bottom: 2px;
     }
 
@@ -82,8 +72,7 @@
     .guest-name {
       font-size: 22px;
       font-weight: 500;
-      color: white;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      color: #8b2c4a;
     }
 
     .btn {
@@ -95,12 +84,7 @@
       color: white;
       font-size: 14px;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      transition: 0.3s;
-    }
-
-    .btn:hover {
-      background: #6e2139;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
   </style>
 </head>
@@ -109,14 +93,10 @@
 
   <div class="cover">
 
-    <!-- VIDEO -->
     <video autoplay muted playsinline preload="auto" id="video" class="bg-video">
       <source src="animatedopening.mp4" type="video/mp4">
     </video>
 
-    <div class="overlay"></div>
-
-    <!-- CONTENT -->
     <div class="content" id="content">
       <div class="label">Kepada Yth.</div>
       <div class="label">Bapak/Ibu/Saudara/i</div>
@@ -129,7 +109,6 @@
 
   </div>
 
-  <!-- AUDIO -->
   <audio id="music" loop>
     <source src="https://raw.githubusercontent.com/kesanastudio/wedding-music/9b5ed0f059367ac58ea25b22c455d7f1d4ab3dd5/YTDown.com_YouTube_Yellow-Cover-by-Vitamin-String-Quartet-B_Media_9jHB8c22ZIs_009_128k.mp3">
   </audio>
@@ -137,22 +116,21 @@
   <script>
     const video = document.getElementById("video");
     const content = document.getElementById("content");
+    const music = document.getElementById("music");
 
-    // pastikan hidden dari awal
     content.classList.remove("show");
 
-    // paksa video langsung mulai
     video.addEventListener("loadeddata", () => {
       video.currentTime = 0;
       video.play();
     });
 
-    // 🔥 DELAY FIX (STABIL DI GITHUB)
+    // tampil di detik 4.5
     setTimeout(() => {
       content.classList.add("show");
     }, 4500);
 
-    // ambil nama tamu dari URL
+    // ambil nama dari URL
     const params = new URLSearchParams(window.location.search);
     const name = params.get("to");
 
@@ -161,30 +139,17 @@
         decodeURIComponent(name.replace(/\+/g, " "));
     }
 
-    // AUDIO CONTROL
-    let hasPlayed = false;
+    // 🔥 AUTOPLAY setelah interaksi pertama
+    document.body.addEventListener("click", function () {
+      music.play();
+    }, { once: true });
 
     function openInvitation() {
-      const music = document.getElementById("music");
-      music.play();
-      hasPlayed = true;
-
       window.open(
         "https://kesanastudio.my.canva.site/the-wedding-of-nada-rais",
         "_blank"
       );
     }
-
-    // pause saat pindah tab
-    document.addEventListener("visibilitychange", function () {
-      const music = document.getElementById("music");
-
-      if (document.hidden) {
-        music.pause();
-      } else if (hasPlayed) {
-        music.play();
-      }
-    });
   </script>
 
 </body>

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Georgia', serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      overflow: hidden;
+    }
+
+    .cover {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+      z-index: -1;
+    }
+
+    /* 🔥 POSISI SUDAH DI-TUNE */
+    .content {
+	position: absolute;
+ 	top: 53%;
+ 	left: 50%;
+  transform: translate(-50%, -50%) translateY(30px);
+}
+      text-align: center;
+      opacity: 0;
+      z-index: 2;
+      width: 80%;
+      transition: all 1.2s ease;
+    }
+
+    .content.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(0);
+    }
+
+    .label {
+      font-size: 14px;
+      color: white;
+      opacity: 0.85;
+      margin-bottom: 2px;
+    }
+
+    .label:nth-child(2) {
+      margin-bottom: 8px;
+    }
+
+    .guest-name {
+      font-size: 22px;
+      font-weight: 500;
+      color: white;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .btn {
+      margin-top: 14px;
+      padding: 12px 26px;
+      border-radius: 30px;
+      border: none;
+      background: #8b2c4a;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #6e2139;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="cover">
+
+    <!-- VIDEO -->
+    <video autoplay muted playsinline preload="auto" id="video" class="bg-video">
+      <source src="animatedopening.mp4" type="video/mp4">
+    </video>
+
+    <div class="overlay"></div>
+
+    <!-- CONTENT -->
+    <div class="content" id="content">
+      <div class="label">Kepada Yth.</div>
+      <div class="label">Bapak/Ibu/Saudara/i</div>
+      <div class="guest-name" id="guest-name">Tamu Undangan</div>
+
+      <button class="btn" onclick="openInvitation()">
+        Open Invitation
+      </button>
+    </div>
+
+  </div>
+
+  <!-- AUDIO -->
+  <audio id="music" loop>
+    <source src="https://raw.githubusercontent.com/kesanastudio/wedding-music/9b5ed0f059367ac58ea25b22c455d7f1d4ab3dd5/YTDown.com_YouTube_Yellow-Cover-by-Vitamin-String-Quartet-B_Media_9jHB8c22ZIs_009_128k.mp3">
+  </audio>
+
+  <script>
+    // VIDEO FIX BIAR GA DELAY
+    const video = document.getElementById("video");
+    video.addEventListener("loadeddata", () => {
+      video.currentTime = 0;
+      video.play();
+    });
+
+    // AMBIL NAMA TAMU DARI URL
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("to");
+
+    if (name) {
+      document.getElementById("guest-name").innerText =
+        decodeURIComponent(name.replace(/\+/g, " "));
+    }
+
+    // MUNCUL DI DETIK 4.5
+    const content = document.getElementById("content");
+
+    video.addEventListener("timeupdate", () => {
+      if (video.currentTime >= 4.5) {
+        content.classList.add("show");
+      }
+    });
+
+    function openInvitation() {
+      const music = document.getElementById("music");
+      music.play();
+
+      window.open(
+        "https://kesanastudio.my.canva.site/the-wedding-of-nada-rais",
+        "_blank"
+      );
+    }
+  </script>
+
+</body>
+</html>

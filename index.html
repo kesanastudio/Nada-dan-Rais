@@ -30,6 +30,7 @@
       overflow: hidden;
     }
 
+    /* VIDEO */
     .bg-video {
       position: absolute;
       inset: 0;
@@ -39,6 +40,7 @@
       z-index: -2;
     }
 
+    /* OVERLAY */
     .overlay {
       position: absolute;
       inset: 0;
@@ -46,15 +48,15 @@
       z-index: -1;
     }
 
-    /* 🔥 POSISI SUDAH DI-TUNE */
+    /* 🔥 POSISI FINAL (SUDAH DI-TUNE) */
     .content {
-	position: absolute;
- 	top: 53%;
- 	left: 50%;
-  transform: translate(-50%, -50%) translateY(30px);
-}
+      position: absolute;
+      top: 51%;
+      left: 50%;
+      transform: translate(-50%, -50%) translateY(40px);
       text-align: center;
       opacity: 0;
+      visibility: hidden;
       z-index: 2;
       width: 80%;
       transition: all 1.2s ease;
@@ -62,6 +64,7 @@
 
     .content.show {
       opacity: 1;
+      visibility: visible;
       transform: translate(-50%, -50%) translateY(0);
     }
 
@@ -132,14 +135,24 @@
   </audio>
 
   <script>
-    // VIDEO FIX BIAR GA DELAY
     const video = document.getElementById("video");
+    const content = document.getElementById("content");
+
+    // pastikan hidden dari awal
+    content.classList.remove("show");
+
+    // paksa video langsung mulai
     video.addEventListener("loadeddata", () => {
       video.currentTime = 0;
       video.play();
     });
 
-    // AMBIL NAMA TAMU DARI URL
+    // 🔥 DELAY FIX (STABIL DI GITHUB)
+    setTimeout(() => {
+      content.classList.add("show");
+    }, 4500);
+
+    // ambil nama tamu dari URL
     const params = new URLSearchParams(window.location.search);
     const name = params.get("to");
 
@@ -148,24 +161,30 @@
         decodeURIComponent(name.replace(/\+/g, " "));
     }
 
-    // MUNCUL DI DETIK 4.5
-    const content = document.getElementById("content");
-
-    video.addEventListener("timeupdate", () => {
-      if (video.currentTime >= 4.5) {
-        content.classList.add("show");
-      }
-    });
+    // AUDIO CONTROL
+    let hasPlayed = false;
 
     function openInvitation() {
       const music = document.getElementById("music");
       music.play();
+      hasPlayed = true;
 
       window.open(
         "https://kesanastudio.my.canva.site/the-wedding-of-nada-rais",
         "_blank"
       );
     }
+
+    // pause saat pindah tab
+    document.addEventListener("visibilitychange", function () {
+      const music = document.getElementById("music");
+
+      if (document.hidden) {
+        music.pause();
+      } else if (hasPlayed) {
+        music.play();
+      }
+    });
   </script>
 
 </body>
